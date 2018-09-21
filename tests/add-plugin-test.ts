@@ -7,12 +7,12 @@ describe('addPlugin', () => {
   it('creates configuration when necessary', () => {
     let target = {};
 
-    addPlugin(target, 'foo-plugin');
+    addPlugin(target, 'babel-plugin-foo');
 
     expect(target).to.deep.equal({
       options: {
         babel: {
-          plugins: ['foo-plugin']
+          plugins: ['babel-plugin-foo']
         }
       }
     });
@@ -30,7 +30,7 @@ describe('addPlugin', () => {
       }
     };
 
-    addPlugin(target, 'foo-plugin');
+    addPlugin(target, 'babel-plugin-foo');
 
     expect(target).to.deep.equal({
       name: 'target',
@@ -38,7 +38,7 @@ describe('addPlugin', () => {
         otherAddon: true,
         babel: {
           loose: true,
-          plugins: ['my-existing-plugin', 'foo-plugin']
+          plugins: ['my-existing-plugin', 'babel-plugin-foo']
         }
       }
     });
@@ -53,9 +53,9 @@ describe('addPlugin', () => {
       }
     };
 
-    addPlugin(target, 'foo-plugin', { before: ['d', 'b', 'c'] });
+    addPlugin(target, 'babel-plugin-foo', { before: ['d', 'b', 'c'] });
 
-    expect(target.options.babel.plugins).to.deep.equal(['a', 'foo-plugin', 'b', 'c', 'd', 'e']);
+    expect(target.options.babel.plugins).to.deep.equal(['a', 'babel-plugin-foo', 'b', 'c', 'd', 'e']);
   });
 
   it('honors `after` configuration', () => {
@@ -67,9 +67,9 @@ describe('addPlugin', () => {
       }
     };
 
-    addPlugin(target, 'foo-plugin', { after: ['b', 'd', 'c'] });
+    addPlugin(target, 'babel-plugin-foo', { after: ['b', 'd', 'c'] });
 
-    expect(target.options.babel.plugins).to.deep.equal(['a', 'b', 'c', 'd', 'foo-plugin', 'e']);
+    expect(target.options.babel.plugins).to.deep.equal(['a', 'b', 'c', 'd', 'babel-plugin-foo', 'e']);
   });
 
   it('honors combined `before` and `after` configuration', () => {
@@ -81,9 +81,9 @@ describe('addPlugin', () => {
       }
     };
 
-    addPlugin(target, 'foo-plugin', { before: ['c'], after: ['b'] });
+    addPlugin(target, 'babel-plugin-foo', { before: ['c'], after: ['b'] });
 
-    expect(target.options.babel.plugins).to.deep.equal(['a', 'b', 'foo-plugin', 'c', 'd', 'e']);
+    expect(target.options.babel.plugins).to.deep.equal(['a', 'b', 'babel-plugin-foo', 'c', 'd', 'e']);
   });
 
   it('rejects unsatisfiable `before`/`after` constraints', () => {
@@ -95,8 +95,8 @@ describe('addPlugin', () => {
       }
     };
 
-    expect(() => addPlugin(target, 'foo-plugin', { before: ['c'], after: ['d'] })).to.throw(
-      'Unable to satisfy placement constraints for Babel plugin foo-plugin'
+    expect(() => addPlugin(target, 'babel-plugin-foo', { before: ['c'], after: ['d'] })).to.throw(
+      'Unable to satisfy placement constraints for Babel plugin babel-plugin-foo'
     );
   });
 });

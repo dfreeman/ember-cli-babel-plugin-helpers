@@ -45,6 +45,39 @@ describe('hasPlugin', () => {
     });
   });
 
+  describe('with shorthand and full names', () => {
+    let target: ConfigurationTarget = {
+      options: {
+        babel: {
+          plugins: [
+            'shorthand-6x-name',
+            '@babel/shorthand-7x-name',
+            '@my-org/shorthand-name',
+            'babel-plugin-longhand-6x-name',
+            '@babel/plugin-longhand-7x-name',
+            '@my-org/babel-plugin-longhand-name'
+          ]
+        }
+      }
+    };
+
+    it('locates plugins by short- or longhand names', () => {
+      expect(hasPlugin(target, 'shorthand-6x-name')).to.be.true;
+      expect(hasPlugin(target, 'babel-plugin-shorthand-6x-name')).to.be.true;
+      expect(hasPlugin(target, '@babel/shorthand-7x-name')).to.be.true;
+      expect(hasPlugin(target, '@babel/plugin-shorthand-7x-name')).to.be.true;
+      expect(hasPlugin(target, '@my-org/shorthand-name')).to.be.true;
+      expect(hasPlugin(target, '@my-org/babel-plugin-shorthand-name')).to.be.true;
+
+      expect(hasPlugin(target, 'longhand-6x-name')).to.be.true;
+      expect(hasPlugin(target, 'babel-plugin-longhand-6x-name')).to.be.true;
+      expect(hasPlugin(target, '@babel/longhand-7x-name')).to.be.true;
+      expect(hasPlugin(target, '@babel/plugin-longhand-7x-name')).to.be.true;
+      expect(hasPlugin(target, '@my-org/longhand-name')).to.be.true;
+      expect(hasPlugin(target, '@my-org/babel-plugin-longhand-name')).to.be.true;
+    });
+  });
+
   describe('with plugins that have configuration', () => {
     let target: ConfigurationTarget = {
       options: {

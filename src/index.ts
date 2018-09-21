@@ -124,7 +124,7 @@ function hasSameConfig(plugin: BabelPluginConfig, candidate: BabelPluginConfig) 
 
 function getName(pluginConfig: BabelPluginConfig): string | undefined {
   let plugin = Array.isArray(pluginConfig) ? pluginConfig[0] : pluginConfig;
-  return typeof plugin === 'string' ? findPackageName(plugin) : plugin.name;
+  return typeof plugin === 'string' ? findPackageName(plugin) : normalizePluginName(plugin.name);
 }
 
 const nodeModulesRegex = /[\\/]node_modules[\\/]/;
@@ -132,7 +132,7 @@ const packageNameRegex = /^((@[^\\/]+[\\/])?[^\\/]*)/;
 
 // Given a plugin string (a package name or full module path), returns the
 // package name where that plugin is implemented.
-function findPackageName(modulePath: string): string {
+function findPackageName(modulePath: string): string | undefined {
   let packagePath = modulePath;
   let match = nodeModulesRegex.exec(modulePath);
   if (match) {
@@ -141,5 +141,32 @@ function findPackageName(modulePath: string): string {
   }
 
   let packageNameMatch = packageNameRegex.exec(packagePath);
-  return packageNameMatch ? packageNameMatch[0] : packagePath;
+  return normalizePluginName(packageNameMatch ? packageNameMatch[0] : packagePath);
+}
+
+// Based on https://babeljs.io/docs/en/next/options#name-normalization
+// Unfortunately the logic Babel uses to implement this isn't exposed
+function normalizePluginName(rawName: string | undefined): string | undefined {
+  if (
+    !rawName ||
+    !/^[\w@]/.test(rawName) ||
+    rawName.startsWith('@babel/plugin-') ||
+    rawName.startsWith('babel-plugin-')
+  ) {
+    return rawName;
+  }
+
+  if (rawName.startsWith('@babel/')) {
+    return rawName.replace('@babel/', '@babel/plugin-');
+  }
+
+  if (rawName.startsWith('@')) {
+    let [scope, name] = rawName.split('/');
+    if (!name.startsWith('babel-plugin')) {
+      name = `babel-plugin-${name}`;
+    }
+    return `${scope}/${name}`;
+  }
+
+  return `babel-plugin-${rawName}`;
 }
