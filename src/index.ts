@@ -53,12 +53,12 @@ export interface AddPluginOptions {
   /**
    * Any plugins that the given one must appear *before* in the plugins array.
    */
-  before?: BabelPluginConfig[];
+  before?: string[];
 
   /**
    * Any plugins that the given one must appear *after* in the plugins array.
    */
-  after?: BabelPluginConfig[];
+  after?: string[];
 }
 
 /**
@@ -82,8 +82,7 @@ export function addPlugin(target: ConfigurationTarget, plugin: BabelPluginConfig
   plugins.splice(targetIndex, 0, plugin);
 }
 
-function findPluginIndices(target: ConfigurationTarget, plugins: BabelPluginConfig[] = []): number[] {
-  let pluginNames = plugins.map(config => resolvePluginName(config));
-  let pluginIndices = pluginNames.map(name => (name ? findPluginIndex(target, name) : -1));
+function findPluginIndices(target: ConfigurationTarget, plugins: string[] = []): number[] {
+  let pluginIndices = plugins.map(name => (name ? findPluginIndex(target, name) : -1));
   return pluginIndices.filter(index => index >= 0);
 }
