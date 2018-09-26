@@ -14,6 +14,9 @@
     "prepublishOnly": "tsc -p tsconfig.publish.json",
     "postpublish": "rimraf lib"
   },
+  "engines": {
+    "node": "6.* || 8.* || >= 10.*"
+  },
   "devDependencies": {
     "@types/chai": "^4.1.5",
     "@types/mocha": "^5.2.5",
