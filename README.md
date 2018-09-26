@@ -54,6 +54,8 @@ An optional `options` hash may also be passed, specifying constraints for where 
 
 If the given `before` and `after` constraints result in a conflict because of the order of existing plugins, `addPlugin` will raise an exception.
 
+If no `before` or `after` constraints are set, the plugin will be added at the end of the array of existing plugin configurations.
+
 ## Notes on Stringency
 
 While these utilities make a best effort to identify existing plugins that are already configured, there are cases where it may be impossible to identify whether a plugin is present or not.
