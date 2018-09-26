@@ -1,4 +1,4 @@
-# ember-cli-babel-plugin-helpers
+# ember-cli-babel-plugin-helpers [![Build Status](https://travis-ci.com/dfreeman/ember-cli-babel-plugin-helpers.svg?branch=master)](https://travis-ci.com/dfreeman/ember-cli-babel-plugin-helpers)
 
 This package provides utilities for managing Babel plugins in configuration for Ember CLI apps and addons. The primary expected consumers are addons that want to set up plugins on behalf of their parent, while ensuring that the same plugin isn't registered multiple times.
 
