@@ -9,11 +9,14 @@ describe('Public Helpers', () => {
     let normalizedNamePlugin: BabelPluginConfig = ['babel-plugin-long-name', {}, 'id'];
     let fullPathPlugin: BabelPluginConfig = ['/path/to/node_modules/babel-plugin-full-path/index.js'];
     let scopedPathPlugin: BabelPluginConfig = ['/path/to/node_modules/@scope/babel-plugin-scoped-path/lib/plugin.js'];
+    let scopedWindowsPathPlugin: BabelPluginConfig = [
+      'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'
+    ];
 
     let target = {
       options: {
         babel: {
-          plugins: [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin]
+          plugins: [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin, scopedWindowsPathPlugin]
         }
       }
     };
@@ -32,6 +35,9 @@ describe('Public Helpers', () => {
 
       expect(hasPlugin(target, '@scope/scoped-path')).to.be.true;
       expect(hasPlugin(target, '@scope/babel-plugin-scoped-path')).to.be.true;
+
+      expect(hasPlugin(target, '@scope/scoped-windows-path')).to.be.true;
+      expect(hasPlugin(target, '@scope/babel-plugin-scoped-path')).to.be.true;
     });
   });
 
@@ -40,11 +46,14 @@ describe('Public Helpers', () => {
     let normalizedNamePlugin: BabelPluginConfig = ['babel-plugin-long-name', {}, 'id'];
     let fullPathPlugin: BabelPluginConfig = ['/path/to/node_modules/babel-plugin-full-path/index.js'];
     let scopedPathPlugin: BabelPluginConfig = ['/path/to/node_modules/@scope/babel-plugin-scoped-path/lib/plugin.js'];
+    let scopedWindowsPathPlugin: BabelPluginConfig = [
+      'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'
+    ];
 
     let target = {
       options: {
         babel: {
-          plugins: [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin]
+          plugins: [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin, scopedWindowsPathPlugin]
         }
       }
     };
@@ -63,6 +72,9 @@ describe('Public Helpers', () => {
 
       expect(findPlugin(target, '@scope/scoped-path')).to.equal(scopedPathPlugin);
       expect(findPlugin(target, '@scope/babel-plugin-scoped-path')).to.equal(scopedPathPlugin);
+
+      expect(findPlugin(target, '@scope/scoped-windows-path')).to.equal(scopedWindowsPathPlugin);
+      expect(findPlugin(target, '@scope/babel-plugin-scoped-windows-path')).to.equal(scopedWindowsPathPlugin);
     });
   });
 

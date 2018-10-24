@@ -59,6 +59,14 @@ describe('Utilities | plugin-names', () => {
       expect(resolvePluginName('/full/path/to/node_modules/@scope/resolved-plugin-name/index.js')).to.equal(
         '@scope/resolved-plugin-name'
       );
+
+      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\resolved-plugin-name\\index.js')).to.equal(
+        'resolved-plugin-name'
+      );
+
+      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\@scope\\resolved-plugin-name\\index.js')).to.equal(
+        '@scope/resolved-plugin-name'
+      );
     });
   });
 });
