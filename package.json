@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-babel-plugin-helpers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Utilities for managing installed Babel plugins in an Ember app or addon",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
