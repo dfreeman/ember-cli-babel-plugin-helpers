@@ -78,7 +78,10 @@ function findPackageName(modulePath: string): string {
 
   let packageNameStartIndex = modulePath.lastIndexOf(match[0]) + match[0].length;
   let packageNameWithEntryPoint = modulePath.substring(packageNameStartIndex);
-  return packageNameRegex.exec(packageNameWithEntryPoint)![1];
+  let packageName = packageNameRegex.exec(packageNameWithEntryPoint)![1];
+
+  // Normalize from '\' to `/` for scoped package names on Windows
+  return packageName.replace('\\', '/');
 }
 
 function isPath(name: string): boolean {
