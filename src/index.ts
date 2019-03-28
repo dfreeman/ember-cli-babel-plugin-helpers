@@ -30,23 +30,28 @@ export interface ConfigurationTarget {
 /**
  * Locates the existing configuration, if any, for a given plugin.
  *
- * @param target An `EmberApp` or `Addon` instance whose configuration should be checked
+ * @param config An array of plugin configuration or an `EmberApp` or `Addon`
+ *   instance whose configuration should be checked
  * @param plugin The name of the plugin to be located
  */
-export function findPlugin(target: ConfigurationTarget, plugin: string): BabelPluginConfig | undefined {
-  let plugins = getPluginsArray(target);
-  let index = findPluginIndex(target, plugin);
+export function findPlugin(
+  config: ConfigurationTarget | BabelPluginConfig[],
+  plugin: string
+): BabelPluginConfig | undefined {
+  let plugins = getPluginsArray(config);
+  let index = findPluginIndex(plugins, plugin);
   return plugins[index];
 }
 
 /**
  * Indicates whether the given plugin is already present in the target's configuration.
  *
- * @param target An `EmberApp` or `Addon` instance whose configuration should be checked
+ * @param config An array of plugin configuration or an `EmberApp` or `Addon`
+ *   instance whose configuration should be checked
  * @param plugin The name of the plugin to be located
  */
-export function hasPlugin(target: ConfigurationTarget, plugin: string): boolean {
-  return !!findPlugin(target, plugin);
+export function hasPlugin(config: BabelPluginConfig[] | ConfigurationTarget, plugin: string): boolean {
+  return !!findPlugin(config, plugin);
 }
 
 export interface AddPluginOptions {
@@ -64,25 +69,30 @@ export interface AddPluginOptions {
 /**
  * Add a plugin to the Babel configuration for the given target.
  *
- * @param target An `EmberApp` or `Addon` instance for which the plugin should be set up
+ * @param config An array of plugin configuration or an `EmberApp` or `Addon`
+ *   instance for which the plugin should be set up
  * @param plugin Configuration for the Babel plugin to add
  * @param options Optional constraints around where the plugin should appear in the array
  */
-export function addPlugin(target: ConfigurationTarget, plugin: BabelPluginConfig, options: AddPluginOptions = {}) {
-  let earliest = Math.max(...findPluginIndices(target, options.after)) + 1;
-  let latest = Math.min(...findPluginIndices(target, options.before));
+export function addPlugin(
+  config: ConfigurationTarget | BabelPluginConfig[],
+  plugin: BabelPluginConfig,
+  options: AddPluginOptions = {}
+) {
+  let plugins = getPluginsArray(config);
+  let earliest = Math.max(...findPluginIndices(plugins, options.after)) + 1;
+  let latest = Math.min(...findPluginIndices(plugins, options.before));
 
   if (earliest > latest) {
     throw new Error(`Unable to satisfy placement constraints for Babel plugin ${resolvePluginName(plugin)}`);
   }
 
-  let plugins = getPluginsArray(target);
   let targetIndex = Number.isFinite(latest) ? latest : Number.isFinite(earliest) ? earliest : plugins.length;
 
   plugins.splice(targetIndex, 0, plugin);
 }
 
-function findPluginIndices(target: ConfigurationTarget, plugins: string[] = []): number[] {
-  let pluginIndices = plugins.map(name => (name ? findPluginIndex(target, name) : -1));
+function findPluginIndices(plugins: BabelPluginConfig[], pluginNames: string[] = []): number[] {
+  let pluginIndices = pluginNames.map(name => (name ? findPluginIndex(plugins, name) : -1));
   return pluginIndices.filter(index => index >= 0);
 }
