@@ -6,7 +6,17 @@ export function resolvePluginName(pluginConfig: BabelPluginConfig): string | voi
 
   if (typeof plugin === 'string') {
     if (isPath(plugin)) {
-      return findPackageName(plugin);
+      let packageName = findPackageName(plugin);
+      let { scope, name } = extractScope(packageName);
+      if (
+        (!scope && name.startsWith('babel-plugin-')) ||
+        (scope === '@babel' && name.startsWith('plugin-')) ||
+        (scope && /\bbabel-plugin\b/.test(name))
+      ) {
+        return packageName;
+      } else {
+        return plugin;
+      }
     } else {
       return normalizePluginName(plugin);
     }
