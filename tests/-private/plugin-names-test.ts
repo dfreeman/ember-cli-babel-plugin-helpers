@@ -68,5 +68,11 @@ describe('Utilities | plugin-names', () => {
         '@scope/resolved-plugin-name'
       );
     });
+
+    it('resolves full path after `module:` prefix untouched', () => {
+      expect(resolvePluginName('module:/full/path/to/node_modules/resolved-plugin-name/index.js')).to.equal(
+        '/full/path/to/node_modules/resolved-plugin-name/index.js'
+      );
+    });
   });
 });
