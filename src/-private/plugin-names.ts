@@ -5,6 +5,9 @@ export function resolvePluginName(pluginConfig: BabelPluginConfig): string | voi
   let plugin = Array.isArray(pluginConfig) ? pluginConfig[0] : pluginConfig;
 
   if (typeof plugin === 'string') {
+    if (plugin.startsWith('module:')) {
+      return normalizePluginName(plugin);
+    }
     if (isPath(plugin)) {
       return findPackageName(plugin);
     } else {
