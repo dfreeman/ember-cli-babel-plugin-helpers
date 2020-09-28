@@ -49,6 +49,15 @@ describe('Public Helpers', () => {
 
       expect(hasPlugin(config, 'module:/path/to/node_modules/some-package/lib/babel-plugin-name.js')).to.be.true;
     });
+
+    it('locates plugins by full path', () => {
+      expect(hasPlugin(config, '/path/to/node_modules/babel-plugin-full-path/index.js')).to.be.true;
+
+      expect(hasPlugin(config, '/path/to/node_modules/@scope/babel-plugin-scoped-path/lib/plugin.js')).to.be.true;
+
+      expect(hasPlugin(config, 'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'))
+        .to.be.true;
+    });
   });
 
   describe('findPlugin', () => {
@@ -97,6 +106,18 @@ describe('Public Helpers', () => {
       expect(findPlugin(config, 'module:/path/to/node_modules/some-package/lib/babel-plugin-name.js')).to.equal(
         modulePathPlugin
       );
+    });
+
+    it('locates plugins by full path', () => {
+      expect(findPlugin(config, '/path/to/node_modules/babel-plugin-full-path/index.js')).to.equal(fullPathPlugin);
+
+      expect(findPlugin(config, '/path/to/node_modules/@scope/babel-plugin-scoped-path/lib/plugin.js')).to.equal(
+        scopedPathPlugin
+      );
+
+      expect(
+        findPlugin(config, 'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js')
+      ).to.equal(scopedWindowsPathPlugin);
     });
   });
 

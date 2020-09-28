@@ -32,5 +32,9 @@ describe('Utilities | plugin-configuration', () => {
       expect(findPluginIndex(plugins, 'module:foo')).to.equal(3);
       expect(findPluginIndex(plugins, 'module:/path/to/node_modules/babel-plugin-full-path/index.js')).to.equal(4);
     });
+
+    it('locates plugins when requested by full path', () => {
+      expect(findPluginIndex(plugins, '/path/to/node_modules/babel-plugin-full-path/index.js')).to.equal(2);
+    });
   });
 });
