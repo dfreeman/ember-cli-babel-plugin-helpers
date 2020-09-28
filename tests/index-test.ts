@@ -12,8 +12,30 @@ describe('Public Helpers', () => {
     let scopedWindowsPathPlugin: BabelPluginConfig = [
       'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'
     ];
+    let nonBabelPluginPackagePlugin: BabelPluginConfig = [
+      '/path/to/node_modules/some-package/lib/babel-plugin-name.js'
+    ];
+    let nonBabelPluginPackageWindowsPlugin: BabelPluginConfig = [
+      'C:\\path\\to\\node_modules\\some-package\\lib\\babel-plugin-name.js'
+    ];
+    let scopedNonBabelPluginPackagePlugin: BabelPluginConfig = [
+      '/path/to/node_modules/@scope/some-package/lib/babel-plugin-name.js'
+    ];
+    let scopedNonBabelPluginPackageWindowsPlugin: BabelPluginConfig = [
+      'C:\\path\\to\\node_modules\\@scope\\some-package\\lib\\babel-plugin-name.js'
+    ];
 
-    let config = [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin, scopedWindowsPathPlugin];
+    let config = [
+      shortNamePlugin,
+      normalizedNamePlugin,
+      fullPathPlugin,
+      scopedPathPlugin,
+      scopedWindowsPathPlugin,
+      nonBabelPluginPackagePlugin,
+      nonBabelPluginPackageWindowsPlugin,
+      scopedNonBabelPluginPackagePlugin,
+      scopedNonBabelPluginPackageWindowsPlugin
+    ];
 
     it('locates plugins by short and normalized names', () => {
       expect(hasPlugin(config, 'nonexistent')).to.be.false;
@@ -33,6 +55,17 @@ describe('Public Helpers', () => {
       expect(hasPlugin(config, '@scope/scoped-windows-path')).to.be.true;
       expect(hasPlugin(config, '@scope/babel-plugin-scoped-path')).to.be.true;
     });
+
+    it('locates plugins in non-babel-plugin packages by full path', () => {
+      expect(hasPlugin(config, '/path/to/node_modules/some-package/lib/babel-plugin-name.js')).to.be.true;
+
+      expect(hasPlugin(config, 'C:\\path\\to\\node_modules\\some-package\\lib\\babel-plugin-name.js')).to.be.true;
+
+      expect(hasPlugin(config, '/path/to/node_modules/@scope/some-package/lib/babel-plugin-name.js')).to.be.true;
+
+      expect(hasPlugin(config, 'C:\\path\\to\\node_modules\\@scope\\some-package\\lib\\babel-plugin-name.js')).to.be
+        .true;
+    });
   });
 
   describe('findPlugin', () => {
@@ -43,8 +76,30 @@ describe('Public Helpers', () => {
     let scopedWindowsPathPlugin: BabelPluginConfig = [
       'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'
     ];
+    let nonBabelPluginPackagePlugin: BabelPluginConfig = [
+      '/path/to/node_modules/some-package/lib/babel-plugin-name.js'
+    ];
+    let nonBabelPluginPackageWindowsPlugin: BabelPluginConfig = [
+      'C:\\path\\to\\node_modules\\some-package\\lib\\babel-plugin-name.js'
+    ];
+    let scopedNonBabelPluginPackagePlugin: BabelPluginConfig = [
+      '/path/to/node_modules/@scope/some-package/lib/babel-plugin-name.js'
+    ];
+    let scopedNonBabelPluginPackageWindowsPlugin: BabelPluginConfig = [
+      'C:\\path\\to\\node_modules\\@scope\\some-package\\lib\\babel-plugin-name.js'
+    ];
 
-    let config = [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin, scopedWindowsPathPlugin];
+    let config = [
+      shortNamePlugin,
+      normalizedNamePlugin,
+      fullPathPlugin,
+      scopedPathPlugin,
+      scopedWindowsPathPlugin,
+      nonBabelPluginPackagePlugin,
+      nonBabelPluginPackageWindowsPlugin,
+      scopedNonBabelPluginPackagePlugin,
+      scopedNonBabelPluginPackageWindowsPlugin
+    ];
 
     it('locates plugins by short and normalized names', () => {
       expect(findPlugin(config, 'nonexistent')).to.be.undefined;
@@ -63,6 +118,24 @@ describe('Public Helpers', () => {
 
       expect(findPlugin(config, '@scope/scoped-windows-path')).to.equal(scopedWindowsPathPlugin);
       expect(findPlugin(config, '@scope/babel-plugin-scoped-windows-path')).to.equal(scopedWindowsPathPlugin);
+    });
+
+    it('locates plugins in non-babel-plugin packages by full path', () => {
+      expect(findPlugin(config, '/path/to/node_modules/some-package/lib/babel-plugin-name.js')).to.equal(
+        nonBabelPluginPackagePlugin
+      );
+
+      expect(findPlugin(config, 'C:\\path\\to\\node_modules\\some-package\\lib\\babel-plugin-name.js')).to.equal(
+        nonBabelPluginPackageWindowsPlugin
+      );
+
+      expect(findPlugin(config, '/path/to/node_modules/@scope/some-package/lib/babel-plugin-name.js')).to.equal(
+        scopedNonBabelPluginPackagePlugin
+      );
+
+      expect(
+        findPlugin(config, 'C:\\path\\to\\node_modules\\@scope\\some-package\\lib\\babel-plugin-name.js')
+      ).to.equal(scopedNonBabelPluginPackageWindowsPlugin);
     });
   });
 

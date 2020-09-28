@@ -51,22 +51,46 @@ describe('Utilities | plugin-names', () => {
       expect(resolvePluginName(['babel-plugin-bar', {}])).to.equal('babel-plugin-bar');
     });
 
-    it('resolves names from absolute plugin paths', () => {
-      expect(resolvePluginName('/full/path/to/node_modules/resolved-plugin-name/index.js')).to.equal(
-        'resolved-plugin-name'
+    it('resolves babel plugin names from absolute plugin paths', () => {
+      expect(resolvePluginName('/full/path/to/node_modules/babel-plugin-name/index.js')).to.equal('babel-plugin-name');
+
+      expect(resolvePluginName('/full/path/to/node_modules/@babel/plugin-name/index.js')).to.equal(
+        '@babel/plugin-name'
       );
 
-      expect(resolvePluginName('/full/path/to/node_modules/@scope/resolved-plugin-name/index.js')).to.equal(
-        '@scope/resolved-plugin-name'
+      expect(resolvePluginName('/full/path/to/node_modules/@scope/babel-plugin-name/index.js')).to.equal(
+        '@scope/babel-plugin-name'
       );
 
-      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\resolved-plugin-name\\index.js')).to.equal(
-        'resolved-plugin-name'
+      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\babel-plugin-name\\index.js')).to.equal(
+        'babel-plugin-name'
       );
 
-      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\@scope\\resolved-plugin-name\\index.js')).to.equal(
-        '@scope/resolved-plugin-name'
+      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\@babel\\plugin-name\\index.js')).to.equal(
+        '@babel/plugin-name'
       );
+
+      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\@scope\\babel-plugin-name\\index.js')).to.equal(
+        '@scope/babel-plugin-name'
+      );
+    });
+
+    it('returns untouched path for non-babel-plugin package', () => {
+      expect(resolvePluginName('/full/path/to/node_modules/package-name/lib/babel-plugin-name.js')).to.equal(
+        '/full/path/to/node_modules/package-name/lib/babel-plugin-name.js'
+      );
+
+      expect(resolvePluginName('/full/path/to/node_modules/@scope/package-name/lib/babel-plugin-name.js')).to.equal(
+        '/full/path/to/node_modules/@scope/package-name/lib/babel-plugin-name.js'
+      );
+
+      expect(resolvePluginName('C:\\full\\path\\to\\node_modules\\package-name\\lib\\babel-plugin-name.js')).to.equal(
+        'C:\\full\\path\\to\\node_modules\\package-name\\lib\\babel-plugin-name.js'
+      );
+
+      expect(
+        resolvePluginName('C:\\full\\path\\to\\node_modules\\@scope\\package-name\\lib\\babel-plugin-name.js')
+      ).to.equal('C:\\full\\path\\to\\node_modules\\@scope\\package-name\\lib\\babel-plugin-name.js');
     });
   });
 });
