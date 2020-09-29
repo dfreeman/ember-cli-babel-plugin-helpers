@@ -85,5 +85,5 @@ function findPackageName(modulePath: string): string {
 }
 
 function isPath(name: string): boolean {
-  return /[\\/]/.test(name);
+  return /[\\/]/.test(name) && !name.startsWith('@') && !name.startsWith('module:');
 }
