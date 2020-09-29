@@ -1,5 +1,5 @@
 import { ConfigurationTarget, BabelPluginConfig } from '..';
-import { normalizePluginName, resolvePluginName } from './plugin-names';
+import { resolvePluginName } from './plugin-names';
 
 export function getPluginsArray(target: ConfigurationTarget | BabelPluginConfig[]): BabelPluginConfig[] {
   if (Array.isArray(target)) {
@@ -12,6 +12,6 @@ export function getPluginsArray(target: ConfigurationTarget | BabelPluginConfig[
 }
 
 export function findPluginIndex(plugins: BabelPluginConfig[], plugin: string): number {
-  let pluginName = normalizePluginName(plugin);
+  let pluginName = resolvePluginName(plugin);
   return plugins.findIndex(candidate => resolvePluginName(candidate) === pluginName);
 }

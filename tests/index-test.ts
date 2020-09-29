@@ -12,8 +12,18 @@ describe('Public Helpers', () => {
     let scopedWindowsPathPlugin: BabelPluginConfig = [
       'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'
     ];
+    let modulePlugin: BabelPluginConfig = ['module:foo'];
+    let modulePathPlugin: BabelPluginConfig = ['module:/path/to/node_modules/some-package/lib/babel-plugin-name.js'];
 
-    let config = [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin, scopedWindowsPathPlugin];
+    let config = [
+      shortNamePlugin,
+      normalizedNamePlugin,
+      fullPathPlugin,
+      scopedPathPlugin,
+      scopedWindowsPathPlugin,
+      modulePlugin,
+      modulePathPlugin
+    ];
 
     it('locates plugins by short and normalized names', () => {
       expect(hasPlugin(config, 'nonexistent')).to.be.false;
@@ -33,6 +43,21 @@ describe('Public Helpers', () => {
       expect(hasPlugin(config, '@scope/scoped-windows-path')).to.be.true;
       expect(hasPlugin(config, '@scope/babel-plugin-scoped-path')).to.be.true;
     });
+
+    it('locates plugins with `module:` prefix', () => {
+      expect(hasPlugin(config, 'module:foo')).to.be.true;
+
+      expect(hasPlugin(config, 'module:/path/to/node_modules/some-package/lib/babel-plugin-name.js')).to.be.true;
+    });
+
+    it('locates plugins by full path', () => {
+      expect(hasPlugin(config, '/path/to/node_modules/babel-plugin-full-path/index.js')).to.be.true;
+
+      expect(hasPlugin(config, '/path/to/node_modules/@scope/babel-plugin-scoped-path/lib/plugin.js')).to.be.true;
+
+      expect(hasPlugin(config, 'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'))
+        .to.be.true;
+    });
   });
 
   describe('findPlugin', () => {
@@ -43,8 +68,18 @@ describe('Public Helpers', () => {
     let scopedWindowsPathPlugin: BabelPluginConfig = [
       'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js'
     ];
+    let modulePlugin: BabelPluginConfig = ['module:foo'];
+    let modulePathPlugin: BabelPluginConfig = ['module:/path/to/node_modules/some-package/lib/babel-plugin-name.js'];
 
-    let config = [shortNamePlugin, normalizedNamePlugin, fullPathPlugin, scopedPathPlugin, scopedWindowsPathPlugin];
+    let config = [
+      shortNamePlugin,
+      normalizedNamePlugin,
+      fullPathPlugin,
+      scopedPathPlugin,
+      scopedWindowsPathPlugin,
+      modulePlugin,
+      modulePathPlugin
+    ];
 
     it('locates plugins by short and normalized names', () => {
       expect(findPlugin(config, 'nonexistent')).to.be.undefined;
@@ -63,6 +98,26 @@ describe('Public Helpers', () => {
 
       expect(findPlugin(config, '@scope/scoped-windows-path')).to.equal(scopedWindowsPathPlugin);
       expect(findPlugin(config, '@scope/babel-plugin-scoped-windows-path')).to.equal(scopedWindowsPathPlugin);
+    });
+
+    it('locates plugins with `module:` prefix', () => {
+      expect(findPlugin(config, 'module:foo')).to.equal(modulePlugin);
+
+      expect(findPlugin(config, 'module:/path/to/node_modules/some-package/lib/babel-plugin-name.js')).to.equal(
+        modulePathPlugin
+      );
+    });
+
+    it('locates plugins by full path', () => {
+      expect(findPlugin(config, '/path/to/node_modules/babel-plugin-full-path/index.js')).to.equal(fullPathPlugin);
+
+      expect(findPlugin(config, '/path/to/node_modules/@scope/babel-plugin-scoped-path/lib/plugin.js')).to.equal(
+        scopedPathPlugin
+      );
+
+      expect(
+        findPlugin(config, 'C:\\path\\to\\node_modules\\@scope\\babel-plugin-scoped-windows-path\\lib\\plugin.js')
+      ).to.equal(scopedWindowsPathPlugin);
     });
   });
 
